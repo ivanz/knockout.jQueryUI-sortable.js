@@ -12,7 +12,7 @@ $(function() {
         init: function (element, valueAccessor, allBindingsAccessor) {
             $(element).sortable({
                 update: function (event, ui) {
-                    var newIndex = $(element).children("li").index(ui.item);
+                    var newIndex = $(element).children().index(ui.item);
 
                     var collection = ko.utils.unwrapObservable(valueAccessor());
                     var collectionItem = $(ui.item).data(ko.bindingHandlers.sortableList._dataItemKey);
