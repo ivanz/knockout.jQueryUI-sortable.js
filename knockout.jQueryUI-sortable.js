@@ -16,7 +16,7 @@ $(function() {
 
                     var collection = ko.utils.unwrapObservable(valueAccessor());
                     var collectionItem = $(ui.item).data(ko.bindingHandlers.sortableList._dataItemKey);
-                    var oldIndex = collection.indexOf(collectionItem);
+                    var oldIndex = ko.utils.arrayIndexOf(collection, collectionItem);
 
                     // move the item from the old index to the new index in the collection.
                     collection.splice(oldIndex, 1);
