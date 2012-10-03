@@ -6,24 +6,31 @@
 $(function() {
     ko.bindingHandlers.sortableList = {
         _dataItemKey: "data-ko-collectionItem",
-
         // Detects when an HTML from a JQuery UI Sortabe has been moved
         // and applies the same move to the ViewModel collection item
         init: function (element, valueAccessor, allBindingsAccessor) {
-            $(element).sortable({
-                update: function (event, ui) {
+            options = allBindingsAccessor().sortableOptions || {};
+            options.update = function (event, ui) {
                     var newIndex = $(element).children().index(ui.item);
-
                     var collection = ko.utils.unwrapObservable(valueAccessor());
                     var collectionItem = $(ui.item).data(ko.bindingHandlers.sortableList._dataItemKey);
                     var oldIndex = ko.utils.arrayIndexOf(collection, collectionItem);
-
-                    // move the item from the old index to the new index in the collection.
                     collection.splice(oldIndex, 1);
                     collection.splice(newIndex, 0, collectionItem);
-                    valueAccessor().valueHasMutated();
-                }
-            });
+                };
+            options.remove = function (event, ui) {
+                    var collection = ko.utils.unwrapObservable(valueAccessor());
+                    var collectionItem = $(ui.item).data(ko.bindingHandlers.sortableList._dataItemKey);
+                    var oldIndex =  ko.utils.arrayIndexOf(collection, collectionItem);
+                    collection.splice(oldIndex, 1);
+                };
+            options.receive = function (event, ui) {
+                    var newIndex = $(element).children().index(ui.item);
+                    var collection = ko.utils.unwrapObservable(valueAccessor());
+                    var collectionItem = $(ui.item).data(ko.bindingHandlers.sortableList._dataItemKey);
+                    collection.splice(newIndex, 0, collectionItem);
+                };
+            $(element).sortable(options);
         }
     };
 
